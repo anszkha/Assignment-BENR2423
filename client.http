@@ -1,0 +1,32 @@
+### GET Request to retrieve a document by ID
+GET http://localhost:3000/document/document123
+
+### POST Request to register a new document
+POST http://localhost:3000/register/document
+Content-Type: application/json
+
+{
+  "id": "document123",
+  "FileName": "example.txt"
+}
+
+### PUT Request to update a staff member
+PUT http://localhost:3000/update/staff
+Content-Type: application/json
+
+{
+  "id": "existingStaffID",
+  "name": "Updated Staff Name",
+  "division": "Updated Division",
+  "rank": "Updated Rank",
+  "phone": "Updated Phone"
+}
+
+### DELETE Request to delete an admin
+DELETE http://localhost:3000/delete/admin
+Content-Type: application/json
+
+{
+  "id": "adminIDToDelete"
+}
+

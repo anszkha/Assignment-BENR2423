@@ -3,6 +3,7 @@ const User = require("./user");
 const Document = require("./document");
 const Project = require("./project");
 const Staff = require("./staff");
+const Visitor = require("./visitor");
 
 MongoClient.connect(
 	// TODO: Connection 
@@ -17,6 +18,7 @@ MongoClient.connect(
 	Document.injectDB(client);
 	Project.injectDB(client);
 	Staff.injectDB(client);
+	Visitor.injectDB(client);
 })
 
 const express = require('express')
@@ -60,7 +62,7 @@ app.get('/',verifyToken, (req, res) => {
 })
 
 app.get('/hello', (req, res) => {
-	res.send('Hello BENR2423')
+	res.send('Hello BENR3433')
 })
 
 /**
@@ -628,6 +630,109 @@ app.delete('/delete/admin',async (req,res) => {
 	res.json({buang})
 })
 
+// Visitor Management Endpoints
+/**
+ * @swagger
+ * tags:
+ *   name: Visitor
+ */
+
+/**
+ * @swagger
+ * /register/visitor:
+ *   post:
+ *     description: Register a new visitor
+ *     tags: [Visitor]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               company:
+ *                 type: string
+ *               purpose:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successful registration
+ *       401:
+ *         description: Invalid data
+ */
+app.post('/register/visitor', async (req, res) => {
+	console.log(req.body);
+	const reg = await Visitor.register(
+	  req.body.id,
+	  req.body.name,
+	  req.body.company,
+	  req.body.purpose,
+	);
+	console.log(reg);
+	res.json({ reg });
+  });
+  
+  /**
+   * @swagger
+   * /visitor/{id}:
+   *   get:
+   *     description: Get visitor by id
+   *     tags: [Visitor]
+   *     parameters:
+   *       - in: path
+   *         name: id 
+   *         schema: 
+   *           type: string
+   *         required: true
+   *         description: Visitor id
+   *     responses:
+   *       200:
+   *         description: Search successful
+   *       401:
+   *         description: Invalid id
+   */
+  app.get('/visitor/:id', async (req, res) => {
+	console.log(req.visitor);
+	const findVisitor = await Visitor.find(req.params.id);
+	if (findVisitor)
+	  res.status(200).json(findVisitor)
+	else
+	  res.status(404).send("Invalid Visitor Id")
+  });
+  
+  /**
+   * @swagger
+   * /delete/visitor:
+   *   delete:
+   *     security:
+   *      - jwt: []
+   *     description: Delete Visitor
+   *     tags: [Visitor]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema: 
+   *             type: object
+   *             properties:
+   *               id: 
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Delete successful
+   *       401:
+   *         description: Invalid id
+   */
+  app.delete('/delete/visitor', async (req, res) => {
+	console.log(req.body);
+	const deleteVisitor = await Visitor.delete(req.body.id);
+	res.json({ deleteVisitor });
+  });
+
 app.listen(port, () => {
 	console.log(`Example app listening on port ${port}`)
 })
@@ -639,6 +744,8 @@ app.get('/admin/only', async (req, res) => {
 	else
 		res.status(403).send('Unauthorized')
 })
+
+
 const jwt = require('jsonwebtoken');
 function generateAccessToken(payload){
 	return jwt.sign(payload, "my-super-secret",{expiresIn: '60s'});
@@ -647,12 +754,17 @@ function verifyToken(req,res, next){
 	const authHeader = req.headers['authorization']
 	const token = authHeader && authHeader.split(' ')[1]
 
+	console.log('Received token:', token);
+
 	if(token == null) return res.sendStatus(401)
 
 	jwt.verify(token, "my-super-secret",(err, user) => {
-		console.log(err)
+		console.log('Error during verification:', err);
 		if(err) return res.sendStatus(403)
-		req.user = user
-		next()
-	})
+		req.user = user;
+		console.log('Verified user:', req.user);
+	
+
+		next();
+	});
 }
