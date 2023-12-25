@@ -1,7 +1,4 @@
-### GET Request to retrieve a document by ID
-GET http://localhost:3000/document/document123
-
-### POST Request to register a new document
+# Register a new document
 POST http://localhost:3000/register/document
 Content-Type: application/json
 
@@ -10,23 +7,116 @@ Content-Type: application/json
   "FileName": "example.txt"
 }
 
-### PUT Request to update a staff member
-PUT http://localhost:3000/update/staff
+# Retrieve a document by ID
+GET http://localhost:3000/document/document123
+
+# Register a new project
+POST http://localhost:3000/register/project
 Content-Type: application/json
 
 {
-  "id": "existingStaffID",
-  "name": "Updated Staff Name",
-  "division": "Updated Division",
-  "rank": "Updated Rank",
-  "phone": "Updated Phone"
+  "id": "project123",
+  "ProjectName": "New Project",
+  "staff": "staff123"
 }
 
-### DELETE Request to delete an admin
-DELETE http://localhost:3000/delete/admin
+# Retrieve a project by ID
+GET http://localhost:3000/project/project123
+
+# Admin login
+POST http://localhost:3000/login/admin
 Content-Type: application/json
 
 {
-  "id": "adminIDToDelete"
+  "id": "adminID",
+  "password": "adminPassword"
 }
+
+# Staff login
+POST http://localhost:3000/login/staff
+Content-Type: application/json
+
+{
+  "id": "staffID",
+  "password": "staffPassword"
+}
+
+# Admin registration
+POST http://localhost:3000/register/admin
+Content-Type: application/json
+
+{
+  "id": "newAdminID",
+  "password": "newAdminPassword",
+  "name": "New Admin",
+  "division": "Admin Division",
+  "rank": "Admin Rank",
+  "phone": "Admin Phone",
+  "role": "admin"
+}
+
+# Staff registration
+POST http://localhost:3000/register/staff
+Content-Type: application/json
+
+{
+  "id": "newStaffID",
+  "password": "newStaffPassword",
+  "name": "New Staff",
+  "division": "Staff Division",
+  "rank": "Staff Rank",
+  "phone": "Staff Phone"
+}
+
+# Update admin
+PATCH http://localhost:3000/update/admin
+Content-Type: application/json
+
+{
+  "id": "adminToUpdate",
+  "password": "newAdminPassword",
+  "name": "Updated Admin",
+  "division": "Updated Admin Division",
+  "rank": "Updated Admin Rank",
+  "phone": "Updated Admin Phone"
+}
+
+# Update staff
+PATCH http://localhost:3000/update/staff
+Content-Type: application/json
+
+{
+  "id": "staffToUpdate",
+  "password": "newStaffPassword",
+  "name": "Updated Staff",
+  "division": "Updated Staff Division",
+  "rank": "Updated Staff Rank",
+  "phone": "Updated Staff Phone"
+}
+
+# Register a new visitor
+POST http://localhost:3000/register/visitor
+Content-Type: application/json
+
+{
+  "id": "visitor123",
+  "name": "John Doe",
+  "company": "ABC Inc.",
+  "purpose": "Meeting"
+}
+
+# Get visitor by ID
+GET http://localhost:3000/visitor/visitor123
+
+# Delete a visitor
+DELETE http://localhost:3000/delete/visitor
+Content-Type: application/json
+
+{
+  "id": "visitor123"
+}
+
+# Get staff by ID (requires authentication)
+GET http://localhost:3000/staff/staffID
+Authorization: Bearer 
 

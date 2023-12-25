@@ -14,7 +14,7 @@ describe('Express Route Test', function () {
 	it('login admin successfully', async () => {
 		return request
 			.post('/login/admin')
-			.send({id: 'eizaz', password: "eizaz" })
+			.send({id: 'fathia', password: "fathia" })
 			.expect('Content-Type', /json/)
 			.expect(200).then(response => {
 				expect(response.body).toEqual(
